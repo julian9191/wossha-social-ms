@@ -1,0 +1,44 @@
+service:
+  name: wossha-social
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  role: arn:aws:iam::954592372276:role/service-role/wossha-auth-lambda-role-nmeqnrpn
+  stage: ${opt:stage, 'dev'}
+
+functions:
+  hello:
+    handler: src/server.handler
+    role: ${self:provider.role}
+    name: ${self:provider.stage}-${self:service.name}-lambda
+    memorySize: 1024
+    timeout: 300
+    layers:
+      - arn:aws:lambda:us-east-1:954592372276:layer:oracle-layer:4
+    environment:
+      DB_CONNECT_STRING: (DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = wosshapass.clvdmhzyqopx.us-east-1.rds.amazonaws.com)(PORT = 1521))(CONNECT_DATA =(SID= wossha)))
+      DB_PASSWORD: WSSSOCIALCXN1
+      DB_USERNAME: WSSSOCIALCXN1
+      EXTERNAL_PROPERTIES: https://s3.amazonaws.com/cf-templates-1w4f34av0vrei-us-east-1/wossha/external.properties
+      S3_BUCKET: wossha-pictures
+      WS_ENDPOINT: https://tzt7u85zs4.execute-api.us-east-1.amazonaws.com/dev/
+    events:
+      - http:
+          method: post
+          path: social/commands
+      - http:
+          method: get
+          path: social/following-users
+      - http:
+          method: get
+          path: social/message-history
+      - http:
+          method: get
+          path: social/notifications
+      - http:
+          method: get
+          path: social/posts

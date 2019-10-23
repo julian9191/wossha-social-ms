@@ -1,0 +1,32 @@
+{
+  "name": "serverless-typescript-poc",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.10",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "pg": "^7.8.1",
+    "reflect-metadata": "^0.1.13",
+    "serverless-http": "^1.10.1",
+    "serverless-offline": "^3.33.0",
+    "serverless-plugin-typescript-express": "^1.0.8",
+    "typescript-ioc": "^1.2.5"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^10.12.18",
+    "aws-sdk": "^2.553.0",
+    "oracledb": "^4.0.1",
+    "serverless-webpack": "^5.2.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.4",
+    "webpack": "^4.29.0"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
+}
