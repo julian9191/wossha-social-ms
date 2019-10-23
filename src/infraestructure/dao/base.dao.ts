@@ -34,12 +34,20 @@ export class BaseDao {
         }
     }
 
-    protected async execute<T>(query: string, paramSet: any, mapper: ResultSetMapper<T>) : Promise<T[]>{
+    protected async executeQuery<T>(query: string, paramSet: any, mapper: ResultSetMapper<T>) : Promise<T[]>{
         if(!this.connection){
             await this.getConnection();
         }
         let params = this.getParamsOrderFromParamsSet(query, paramSet);
-        return await this.executeQuery(query, params, mapper);
+        return await this.executeQueryStatement(query, params, mapper);
+    }
+
+    protected async execute(query: string, paramSet: any) : Promise<boolean>{
+        if(!this.connection){
+            await this.getConnection();
+        }
+        let params = this.getParamsOrderFromParamsSet(query, paramSet);
+        return await this.executeUpdateStatement(query, params);
     }
 
     private getParamsOrderFromParamsSet(query: string, paramSet: ParamSet): string[]{
@@ -100,7 +108,7 @@ export class BaseDao {
         });
 	}
 
-    private async executeQuery<T>(query: string, paramSet: any, mapper: ResultSetMapper<T>) : Promise<T[]>{
+    private async executeQueryStatement<T>(query: string, paramSet: any, mapper: ResultSetMapper<T>) : Promise<T[]>{
         
         let $this = this;
         let pr = new Promise<T[]>(function(resolve, reject){
@@ -119,6 +127,19 @@ export class BaseDao {
 				}
 
                 resolve(mapper.map(result));
+            })
+        });
+
+        return pr;
+    }
+
+    private async executeUpdateStatement(query: string, paramSet: any) : Promise<boolean>{
+        
+        let $this = this;
+        let pr = new Promise<boolean>(function(resolve, reject){
+            
+            $this.connection.execute(query, paramSet).then(function(data){
+                resolve(true);
             })
         });
 

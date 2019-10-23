@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "source-map-support": "^0.5.10",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "pg": "^7.8.1",
@@ -15,7 +14,9 @@
     "serverless-http": "^1.10.1",
     "serverless-offline": "^3.33.0",
     "serverless-plugin-typescript-express": "^1.0.8",
-    "typescript-ioc": "^1.2.5"
+    "source-map-support": "^0.5.10",
+    "typescript-ioc": "^1.2.5",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",

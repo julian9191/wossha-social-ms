@@ -1,8 +1,9 @@
 import { IRepository } from "./irepository";
-import { FollowUser } from "../../dto/follow.user";
 import { FollowingUser } from "../../dto/following.user";
 import { SocialDao } from "../dao/follow/social.dao";
 import { Inject } from "typescript-ioc";
+import { FollowUser } from "../../commands/followUser/model/follow.user";
+import { Notification } from "../../dto/notification";
 
 export class SocialRepository implements IRepository<FollowUser> {
     
@@ -14,22 +15,23 @@ export class SocialRepository implements IRepository<FollowUser> {
         return await this.socialDao.getFollowingUsers(username);
     }
     
-    public add(clothe: FollowUser) {
+    public async add(clothe: FollowUser) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.add(clothe);
     }
     
-    public addNotification(notificacion: /*Notification*/any) {
+    public async addNotification(notificacion: Notification): Promise<boolean> {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.addNotification(notificacion);
+        return await this.socialDao.addNotification(notificacion);
     }
     
-    public addPost(/*post: Post*/) {
+    public async addPost(/*post: Post*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.addPost(post);
     }
     
-    public addMentionedUsers(mentionedUsers/*: List<string>*/, uuidPost: string) {
+    public async addMentionedUsers(mentionedUsers/*: List<string>*/, uuidPost: string) {
         /*this.socialDao = this.dbi.onDemand(SocialDao.class);
         for (let mentionedUser: string in mentionedUsers) {
             this.socialDao.addMentionedUser(mentionedUser, uuidPost);
@@ -37,12 +39,12 @@ export class SocialRepository implements IRepository<FollowUser> {
         */
     }
     
-    public addReaction(reaction/*: Reaction*/) {
+    public async addReaction(reaction/*: Reaction*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.addReaction(reaction);
     }
     
-    public addAttachments(attachments/*: List<Attachment>*/) {
+    public async addAttachments(attachments/*: List<Attachment>*/) {
         /*this.socialDao = this.dbi.onDemand(SocialDao.class);
         for (let attachment: Attachment in attachments) {
             this.socialDao.addAttachments(attachment);
@@ -50,17 +52,16 @@ export class SocialRepository implements IRepository<FollowUser> {
         */
     }
     
-    public addAttachment(attachment/*: Attachment*/) {
+    public async addAttachment(attachment/*: Attachment*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.addAttachments(attachment);
     }
     
-    public getFollowersRelationship(senderUsername: string, receiverUsername: string)/*: FollowUser*/ {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //return this.socialDao.getFollowersRelationship(senderUsername, receiverUsername);
+    public async getFollowersRelationship(senderUsername: string, receiverUsername: string): Promise<FollowUser[]> {
+        return await this.socialDao.getFollowersRelationship(senderUsername, receiverUsername);
     }
     
-    public getChatMessageHistory(username: string, init: number, limit: number)/*: Map<string, Object>*/ {
+    public async getChatMessageHistory(username: string, init: number, limit: number)/*: Map<string, Object>*/ {
         /*this.socialDao = this.dbi.onDemand(SocialDao.class);
         let count: Integer = this.socialDao.countChatMessageHistory(username);
         let history: List<ChatMessage> = this.socialDao.getChatMessageHistory(username, init, limit);
@@ -72,7 +73,7 @@ export class SocialRepository implements IRepository<FollowUser> {
         return resultMap;*/
     }
     
-    public getPosts(username: string, init: number, limit: number, profileUsername: string)/*: Map<string, Object>*/ {
+    public async getPosts(username: string, init: number, limit: number, profileUsername: string)/*: Map<string, Object>*/ {
         /*this.socialDao = this.dbi.onDemand(SocialDao.class);
         let count: Integer = 0;
         let history: List<Post> = new ArrayList();
@@ -148,86 +149,86 @@ export class SocialRepository implements IRepository<FollowUser> {
         return resultMap;*/
     }
     
-    public getOwnPosts(uuidPosts/*: List<string>*/, username: string)/*: List<string>*/ {
+    public async getOwnPosts(uuidPosts/*: List<string>*/, username: string)/*: List<string>*/ {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //return this.socialDao.getOwnPosts(this.dbi, uuidPosts, username);
     }
     
-    public getReactionByType(username: string, uuidPost: string, reactionType: string)/*: Reaction*/ {
+    public async getReactionByType(username: string, uuidPost: string, reactionType: string)/*: Reaction*/ {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //return this.socialDao.getReactionByType(username, uuidPost, reactionType);
     }
     
-    public getReaction(username: string, uuidPost: string)/*: Reaction*/ {
+    public async getReaction(username: string, uuidPost: string)/*: Reaction*/ {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //return this.socialDao.getReaction(username, uuidPost);
     }
     
-    public getUserNotifications(username: string)/*: List<Notification>*/ {
+    public async getUserNotifications(username: string)/*: List<Notification>*/ {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //return this.socialDao.getUserNotifications(username);
     }
     
-    public stopFollowingUser(username: string, followingUserName: string) {
+    public async stopFollowingUser(username: string, followingUserName: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.removeFollowingUser(username, followingUserName);
     }
     
-    public saveChatMessage(message/*: ChatMessage*/) {
+    public async saveChatMessage(message/*: ChatMessage*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.saveChatMessage(message);
     }
     
-    public changeStateFollowUser(senderUsername: string, username: string, state: number) {
+    public async changeStateFollowUser(senderUsername: string, username: string, state: number) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.changeStateFollowUser(senderUsername, username, state);
     }
     
-    public updateReactionType(username: string, uuidPost: string, reactionType: string) {
+    public async updateReactionType(username: string, uuidPost: string, reactionType: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.updateReactionType(username, uuidPost, reactionType);
     }
     
-    public deleteNotification(senderUsername: string, username: string, notificationType: string) {
+    public async deleteNotification(senderUsername: string, username: string, notificationType: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.deleteNotification(senderUsername, username, notificationType);
     }
     
-    public removeReaction(username: string, uuidPost: string, reactionType: string) {
+    public async removeReaction(username: string, uuidPost: string, reactionType: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.removeReaction(username, uuidPost, reactionType);
     }
     
-    public deleteAllReactions(uuidPosts/*: List<string>*/) {
+    public async deleteAllReactions(uuidPosts/*: List<string>*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.deleteAllReactions(this.dbi, uuidPosts);
     }
     
-    public deleteAllMentionedUsers(uuidPosts/*: List<string>*/) {
+    public async deleteAllMentionedUsers(uuidPosts/*: List<string>*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.deleteAllMentionedUsers(this.dbi, uuidPosts);
     }
     
-    public deleteAttachments(uuidPosts/*: List<string>*/, username: string) {
+    public async deleteAttachments(uuidPosts/*: List<string>*/, username: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.deleteAttachments(this.dbi, username, uuidPosts);
     }
     
-    public deletePosts(uuidPosts/*: List<string>*/, username: string) {
+    public async deletePosts(uuidPosts/*: List<string>*/, username: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.deletePosts(this.dbi, username, uuidPosts);
     }
     
-    public changeNotifToViewed(username: string, ids/*: List<string>*/) {
+    public async changeNotifToViewed(username: string, ids/*: List<string>*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.changeNotifToViewed(this.dbi, username, ids);
     }
     
-    public update(clothe: FollowUser) {
+    public async update(clothe: FollowUser) {
         
     }
     
-    public remove(clothe: FollowUser) {
+    public async remove(clothe: FollowUser) {
         
     }
 }
