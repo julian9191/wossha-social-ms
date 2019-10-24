@@ -1,5 +1,5 @@
 import { ICommand } from "./icommand";
 
 export interface ICommandSerializer<T> {
-    deserialize(json:string): ICommand<T>;
+    deserialize(data:any): ICommand<T>;
 }

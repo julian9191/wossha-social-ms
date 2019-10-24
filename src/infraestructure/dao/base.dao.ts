@@ -127,7 +127,8 @@ export class BaseDao {
 				}
 
                 resolve(mapper.map(result));
-            })
+                
+            }).catch(err => reject(err))
         });
 
         return pr;
@@ -138,9 +139,9 @@ export class BaseDao {
         let $this = this;
         let pr = new Promise<boolean>(function(resolve, reject){
             
-            $this.connection.execute(query, paramSet).then(function(data){
+            $this.connection.execute(query, paramSet, {autoCommit: true}).then(function(data){
                 resolve(true);
-            })
+            }).catch(err => reject(err))
         });
 
         return pr;

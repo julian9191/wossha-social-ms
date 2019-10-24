@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
+    "@types/oracledb": "^4.0.4",
     "aws-sdk": "^2.553.0",
     "oracledb": "^4.0.1",
     "serverless-webpack": "^5.2.0",

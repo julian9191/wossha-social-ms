@@ -1,9 +1,10 @@
 import { CommandResult } from "./command.result";
+import { UserSessionInfo } from "../dto/user.session.info";
 
 export interface ICommand <T> {
-    getData(): T
     commandName(): String;
+    getData(): T
     setData(data: T);
-    setUsername(username: string); 
+    setSesionInfo(sesionInfo: UserSessionInfo); 
     execute(): Promise<CommandResult>;
 }

@@ -1,6 +1,7 @@
 import Express = require('express')
 import * as bodyParser from "body-parser";
 
+import commandProcesor from "./commands/command.processor";
 import socialController from "./resources/social.controller";
 
 class App {
@@ -15,6 +16,7 @@ class App {
     private config() {
         this.app.use(bodyParser.json());
         this.app.use(socialController);
+        this.app.use(commandProcesor);
     }
 }
 

@@ -1,69 +1,49 @@
 import { ICommandSerializer } from "./Icommand.serializer";
+import { FollowUserSerializer } from "./followUser/follow.user.serializer";
+import { Inject } from "typescript-ioc";
 
 export class CommandSerializers {
     
-    private processors: Map<String, ICommandSerializer> = new Map();;
+    private processors: Map<String, ICommandSerializer<any>> = new Map();;
     
     // serializers
+
+    @Inject
     private followUserSerializer: FollowUserSerializer;
+    /*@Inject
     private stopFollowingUserSerializer: StopFollowingUserSerializer;
+    @Inject
     private acceptFollowSerializer: AcceptFollowSerializer;
+    @Inject
     private changeNotifToViewedSerializer: ChangeNotifToViewedSerializer;
+    @Inject
     private refuseFollowSerializer: RefuseFollowSerializer;
+    @Inject
     private createPostSerializer: CreatePostSerializer;
+    @Inject
     private reactPostSerializer: ReactPostSerializer;
+    @Inject
     private deletePostSerializer: DeletePostSerializer;
-    private sharePostSerializer: SharePostSerializer;
+    @Inject
+    private sharePostSerializer: SharePostSerializer;*/
+
+    public constructor(){
+        this.initMapper();
+    }
     
-    public initMapper() {
+    private initMapper() {
         this.processors.set("FollowUser", this.followUserSerializer);
-        this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
+        /*this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
         this.processors.set("AcceptFollow", this.acceptFollowSerializer);
         this.processors.set("ChangeNotifToViewed", this.changeNotifToViewedSerializer);
         this.processors.set("RefuseFollow", this.refuseFollowSerializer);
         this.processors.set("CreatePost", this.createPostSerializer);
         this.processors.set("SharePost", this.sharePostSerializer);
         this.processors.set("ReactPost", this.reactPostSerializer);
-        this.processors.set("DeletePost", this.deletePostSerializer);
+        this.processors.set("DeletePost", this.deletePostSerializer);*/
     }
     
-    public get(commandName: String): ICommandSerializer {
+    public get(commandName: String): ICommandSerializer<any> {
         return this.processors.get(commandName);
-    }
-    
-    public setFollowUserSerializer(followUserSerializer: FollowUserSerializer) {
-        this.followUserSerializer = followUserSerializer;
-    }
-    
-    public setStopFollowingUserSerializer(stopFollowingUserSerializer: StopFollowingUserSerializer) {
-        this.stopFollowingUserSerializer = stopFollowingUserSerializer;
-    }
-    
-    public setAcceptFollowSerializer(acceptFollowSerializer: AcceptFollowSerializer) {
-        this.acceptFollowSerializer = acceptFollowSerializer;
-    }
-    
-    public setChangeNotifToViewedSerializer(changeNotifToViewedSerializer: ChangeNotifToViewedSerializer) {
-        this.changeNotifToViewedSerializer = changeNotifToViewedSerializer;
-    }
-    
-    public setRefuseFollowSerializer(refuseFollowSerializer: RefuseFollowSerializer) {
-        this.refuseFollowSerializer = refuseFollowSerializer;
-    }
-    
-    public setCreatePostSerializer(createPostSerializer: CreatePostSerializer) {
-        this.createPostSerializer = createPostSerializer;
-    }
-    
-    public setReactPostSerializer(reactPostSerializer: ReactPostSerializer) {
-        this.reactPostSerializer = reactPostSerializer;
-    }
-    
-    public setDeletePostSerializer(deletePostSerializer: DeletePostSerializer) {
-        this.deletePostSerializer = deletePostSerializer;
-    }
-    
-    public setSharePostSerializer(sharePostSerializer: SharePostSerializer) {
-        this.sharePostSerializer = sharePostSerializer;
     }
 }

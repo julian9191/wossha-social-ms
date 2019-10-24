@@ -15,14 +15,11 @@ export class SocialRepository implements IRepository<FollowUser> {
         return await this.socialDao.getFollowingUsers(username);
     }
     
-    public async add(clothe: FollowUser) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.add(clothe);
+    public async add(followUser: FollowUser): Promise<boolean> {
+        return await this.socialDao.add(followUser);
     }
     
     public async addNotification(notificacion: Notification): Promise<boolean> {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.addNotification(notificacion);
         return await this.socialDao.addNotification(notificacion);
     }
     

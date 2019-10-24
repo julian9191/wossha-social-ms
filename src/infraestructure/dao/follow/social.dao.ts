@@ -72,4 +72,28 @@ export class SocialDao extends BaseDao {
             return null;
         }
     }
+
+    public async add(followUser:FollowUser) : Promise<boolean>{
+        try {
+
+            console.log("LLegaaaaaaa!!!")
+
+            let query = `Insert into TWSS_FOLLOWERS 
+            (UUID,SENDER_USERNAME,RECEIVER_USERNAME,STATE) values 
+            (:uuid, :senderUsername, :receiverUsername, :state)`;
+
+            let params = new ParamSet();
+            params.addParam("uuid", followUser.uuid);
+            params.addParam("senderUsername", followUser.senderUsername);
+            params.addParam("receiverUsername", followUser.receiverUsername);
+            params.addParam("state", followUser.state+"");
+
+            console.log("%%%&&&+++: "+query+", "+JSON.stringify(params));
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.add: ${err}`);
+            return null;
+        }
+    }
 }
