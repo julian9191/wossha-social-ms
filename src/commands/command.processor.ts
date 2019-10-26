@@ -14,18 +14,15 @@ const router = Express.Router();
 const PREFIX : string = "/social";
 const commandSerializers: CommandSerializers = new CommandSerializers();
 
-router.post(PREFIX+"/commands", async (req: Express.Request, res: Express.Response) => {
+router.post(PREFIX+"/commands", async (req: /*Express.Request*/any, res: Express.Response) => {
     try {
         const data = req.body;
 
         let cs: ICommandSerializer<any> = commandSerializers.get(data.commandName);;
         let command: ICommand<any> = cs.deserialize(data);
-        /*let userSessionInfo: UserSessionInfo = new UserSessionInfo(req.header("firstName"), 
-            req.header("lastName"), req.header("profilePicture"), 
-            req.header("username"));*/
-        let userSessionInfo: UserSessionInfo = new UserSessionInfo("julian", 
-            "Giraldo", "29f794fd-8eca-11e9-a116-6fcd3081ca34", 
-            "juliancho9191");
+        
+        let userSessionInfo: UserSessionInfo = req.authorizer;
+
         command.setSesionInfo(userSessionInfo);
         let result: CommandResult = await command.execute();
 

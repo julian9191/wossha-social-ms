@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
+    "@types/express": "^4.17.1",
     "@types/node": "^10.12.18",
     "@types/oracledb": "^4.0.4",
     "aws-sdk": "^2.553.0",

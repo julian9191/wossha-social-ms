@@ -10,7 +10,7 @@ const PREFIX : string = "/social";
 
 const repo: SocialRepository = new SocialRepository();
 
-router.get(PREFIX+"/following-users", async (req: Express.Request, res: Express.Response) => {
+router.get(PREFIX+"/following-users", async (req: /*Express.Request*/any, res: Express.Response) => {
     try {
         const username : string = req.header('username');
         
