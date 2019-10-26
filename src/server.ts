@@ -8,6 +8,8 @@ const handler = serverless(app);
 module.exports.handler = async (event, context) => {
     
     console.log("incoming event: "+JSON.stringify(event));
-    Globals.ACCOUNT_ID = context.invokedFunctionArn.split(":")[4];
+    Globals.AWS_ACCOUNT_ID = context.invokedFunctionArn.split(":")[4];
+    Globals.LAMBDA_REGION = context.invokedFunctionArn.split(":")[3];
+
     return await handler(event, context);
 };

@@ -9,6 +9,7 @@ provider:
   runtime: nodejs10.x
   role: arn:aws:iam::954592372276:role/service-role/wossha-auth-lambda-role-nmeqnrpn
   stage: ${opt:stage, 'dev'}
+    
 
 functions:
   hello:
@@ -26,6 +27,7 @@ functions:
       EXTERNAL_PROPERTIES: https://s3.amazonaws.com/cf-templates-1w4f34av0vrei-us-east-1/wossha/external.properties
       S3_BUCKET: wossha-pictures
       WS_ENDPOINT: https://tzt7u85zs4.execute-api.us-east-1.amazonaws.com/dev/
+      QUEUES_MAP: ${file(../wossha-infrastructure/SQS/config.json):QUEUES_MAP}
     events:
       - http:
           method: post

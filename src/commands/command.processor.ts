@@ -6,6 +6,7 @@ import { UserSessionInfo } from "../dto/user.session.info";
 import { CommandResult } from "./command.result";
 import { Event } from "../infraestructure/event/event";
 import { ControllerWrapper } from "../resources/controller.wrapper";
+import { Globals } from "../globals";
 var AWS = require('aws-sdk');
 
 var sqs = new AWS.SQS({region : 'us-east-1'});
@@ -30,31 +31,30 @@ router.post(PREFIX+"/commands", async (req: Express.Request, res: Express.Respon
 
         console.log("number of events: "+result.events.length);
 			
-		//await pushMessageToSQS(result.events);
+		await pushMessageToSQS(result.events);
 
         res.status(200).json(ControllerWrapper.wrapMessaje(result.message, result.response));
 
     } catch(error) {
-        console.log("/////////////// llega al catch");
         res.status(500).json(ControllerWrapper.wrapMessaje(error+"", null))
     }
 });
 
 async function pushMessageToSQS(events: Event[]){
-
+    
     for (const event of events) {
         let message = JSON.stringify(event);
+        let queueName = Globals.getQueuesMap("EVT." + event.name);
         try {
-            //let queueName = properties.getString("EVENT." + event.name + ".QUEUES");
             let sqsPayload = {
               MessageBody: message,
-              QueueUrl: "https://sqs.us-east-1.amazonaws.com/954592372276/example-queue"
+              QueueUrl: `https://sqs.${Globals.LAMBDA_REGION}.amazonaws.com/${Globals.AWS_ACCOUNT_ID}/${queueName}`
             };
             await sqs.sendMessage(sqsPayload).promise();
         
-            console.log("messages sent: "+message);
+            console.log(`messages sent to queue ${queueName}: ${message}`);
         }catch (err) {
-            console.error("error sending the message: "+message+": "+err);
+            console.error(`error sending the message to queue ${queueName}: ${message}, with error: ${err}`);
         }
 
     }
