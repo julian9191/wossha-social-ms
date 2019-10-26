@@ -1,6 +1,7 @@
 import { ICommandSerializer } from "./Icommand.serializer";
 import { FollowUserSerializer } from "./followUser/follow.user.serializer";
 import { Inject } from "typescript-ioc";
+import { AcceptFollowSerializer } from "./acceptFollow/accept.follow.serializer";
 
 export class CommandSerializers {
     
@@ -10,10 +11,10 @@ export class CommandSerializers {
 
     @Inject
     private followUserSerializer: FollowUserSerializer;
-    /*@Inject
-    private stopFollowingUserSerializer: StopFollowingUserSerializer;
     @Inject
     private acceptFollowSerializer: AcceptFollowSerializer;
+    /*@Inject
+    private stopFollowingUserSerializer: StopFollowingUserSerializer;
     @Inject
     private changeNotifToViewedSerializer: ChangeNotifToViewedSerializer;
     @Inject
@@ -33,8 +34,8 @@ export class CommandSerializers {
     
     private initMapper() {
         this.processors.set("FollowUser", this.followUserSerializer);
-        /*this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
         this.processors.set("AcceptFollow", this.acceptFollowSerializer);
+        /*this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
         this.processors.set("ChangeNotifToViewed", this.changeNotifToViewedSerializer);
         this.processors.set("RefuseFollow", this.refuseFollowSerializer);
         this.processors.set("CreatePost", this.createPostSerializer);

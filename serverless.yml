@@ -8,6 +8,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   role: arn:aws:iam::954592372276:role/service-role/wossha-auth-lambda-role-nmeqnrpn
+  authorizer: arn:aws:lambda:us-east-1:954592372276:function:wossha-api-authorizer-lambda
   stage: ${opt:stage, 'dev'}
     
 
@@ -32,16 +33,20 @@ functions:
       - http:
           method: post
           path: social/commands
-          authorizer: arn:aws:lambda:us-east-1:954592372276:function:wossha-api-authorizer-lambda
+          authorizer: ${self:provider.authorizer}
       - http:
           method: get
           path: social/following-users
+          authorizer: ${self:provider.authorizer}
       - http:
           method: get
           path: social/message-history
+          authorizer: ${self:provider.authorizer}
       - http:
           method: get
           path: social/notifications
+          authorizer: ${self:provider.authorizer}
       - http:
           method: get
           path: social/posts
+          authorizer: ${self:provider.authorizer}

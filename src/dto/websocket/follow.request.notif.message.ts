@@ -3,7 +3,7 @@ import { Notification } from "../notification";
 
 export class FollowRequestNotifMessage implements IChatMessage {
     
-    private responseType: string = "FOLLOW-REQUEST-NOTIF";
+    public responseType: string = "FOLLOW-REQUEST-NOTIF";
     public fromId: string;
     public toId: string;
 
@@ -22,5 +22,4 @@ export class FollowRequestNotifMessage implements IChatMessage {
     public setResponseType(responseType: string) {
         this.responseType = this.responseType;
     }
-    
 }

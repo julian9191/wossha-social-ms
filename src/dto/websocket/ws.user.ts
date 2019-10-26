@@ -2,29 +2,13 @@
 export class WsUser {
     
     //@DynamoDBHashKey()
-    private username: string;
+    public username: string;
     
     //@DynamoDBHashKey()
-    private ConnectionId: string;
+    public ConnectionId: string;
     
     public constructor (username: string, connectionId: string) {
         this.username = this.username;
-        this.ConnectionId = connectionId;
-    }
-    
-    public getUsername(): string {
-        return this.username;
-    }
-    
-    public setUsername(username: string) {
-        this.username = this.username;
-    }
-    
-    public getConnectionId(): string {
-        return this.ConnectionId;
-    }
-    
-    public setConnectionId(connectionId: string) {
         this.ConnectionId = connectionId;
     }
 }

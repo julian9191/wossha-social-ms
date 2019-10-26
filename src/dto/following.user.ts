@@ -1,9 +1,9 @@
 export class FollowingUser {
 
-    private username:string;
-    private state:number;
+    public username:string;
+    public state:number;
 
-    constructor(username: string, state: number) {
+    public constructor(username: string, state: number) {
 		  this.username = username;
 		  this.state = state;
     }

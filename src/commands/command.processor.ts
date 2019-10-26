@@ -20,17 +20,16 @@ router.post(PREFIX+"/commands", async (req: /*Express.Request*/any, res: Express
 
         let cs: ICommandSerializer<any> = commandSerializers.get(data.commandName);;
         let command: ICommand<any> = cs.deserialize(data);
-        
         let userSessionInfo: UserSessionInfo = req.authorizer;
 
         command.setSesionInfo(userSessionInfo);
         let result: CommandResult = await command.execute();
 
-        console.log("number of events: "+result.events.length);
+        console.log("number of events: "+result.getEvents().length);
 			
-		await pushMessageToSQS(result.events);
+		await pushMessageToSQS(result.getEvents());
 
-        res.status(200).json(ControllerWrapper.wrapMessaje(result.message, result.response));
+        res.status(200).json(ControllerWrapper.wrapMessaje(result.getMessage(), result.getResponse()));
 
     } catch(error) {
         res.status(500).json(ControllerWrapper.wrapMessaje(error+"", null))

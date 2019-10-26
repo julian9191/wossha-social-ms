@@ -177,8 +177,7 @@ export class SocialRepository implements IRepository<FollowUser> {
     }
     
     public async changeStateFollowUser(senderUsername: string, username: string, state: number) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.changeStateFollowUser(senderUsername, username, state);
+        return await this.socialDao.changeStateFollowUser(senderUsername, username, state);
     }
     
     public async updateReactionType(username: string, uuidPost: string, reactionType: string) {
@@ -187,8 +186,7 @@ export class SocialRepository implements IRepository<FollowUser> {
     }
     
     public async deleteNotification(senderUsername: string, username: string, notificationType: string) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.deleteNotification(senderUsername, username, notificationType);
+        return await this.socialDao.deleteNotification(senderUsername, username, notificationType);
     }
     
     public async removeReaction(username: string, uuidPost: string, reactionType: string) {

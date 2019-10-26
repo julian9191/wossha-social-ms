@@ -57,14 +57,16 @@ export class SocialDao extends BaseDao {
             (TYPE,RECEIVER_USERNAME,SENDER_USERNAME,SENDER_NAME,SENDER_PICTURE,VIEWED,OPENED) 
             values (:type,:receiverUserName,:senderUserName,:senderName,:senderPicture,:viewed,:opend)`;
 
+            console.log("aaaaa: "+JSON.stringify(notificacion));
+
             let params = new ParamSet();
             params.addParam("type", notificacion.type);
             params.addParam("receiverUserName", notificacion.receiverUserName);
             params.addParam("senderUserName", notificacion.senderUserName);
             params.addParam("senderName", notificacion.senderName);
             params.addParam("senderPicture", notificacion.senderPicture);
-            params.addParam("viewed", notificacion.viewed+"");
-            params.addParam("opend", notificacion.opend+"");
+            params.addParam("viewed", notificacion.viewed?"1":"0");
+            params.addParam("opend", notificacion.opend?"1":"0");
 
             return this.execute(query, params);
         } catch (err) {
@@ -75,9 +77,6 @@ export class SocialDao extends BaseDao {
 
     public async add(followUser:FollowUser) : Promise<boolean>{
         try {
-
-            console.log("LLegaaaaaaa!!!")
-
             let query = `Insert into TWSS_FOLLOWERS 
             (UUID,SENDER_USERNAME,RECEIVER_USERNAME,STATE) values 
             (:uuid, :senderUsername, :receiverUsername, :state)`;
@@ -96,4 +95,44 @@ export class SocialDao extends BaseDao {
             return null;
         }
     }
+
+    // UPDATES--------------------------------------------------------------------------------------------------------------------------------------
+
+    public async changeStateFollowUser(senderUsername: string, username: string, state: number) : Promise<boolean>{
+        try {
+            let query = `UPDATE TWSS_FOLLOWERS SET STATE = :state 
+            WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username`;
+
+            let params = new ParamSet();
+            params.addParam("senderUsername", senderUsername);
+            params.addParam("username", username);
+            params.addParam("state", state+"");
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.changeStateFollowUser: ${err}`);
+            return null;
+        }
+    }
+
+
+    // REMOVES--------------------------------------------------------------------------------------------------------------------------------------
+
+    public async deleteNotification(senderUsername: string, username: string, notificationType: string) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_NOTIFICATIONS 
+            WHERE SENDER_USERNAME=:senderUsername AND RECEIVER_USERNAME=:username AND TYPE=:notificationType`;
+
+            let params = new ParamSet();
+            params.addParam("senderUsername", senderUsername);
+            params.addParam("username", username);
+            params.addParam("notificationType", notificationType);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.deleteNotification: ${err}`);
+            return null;
+        }
+    }
+
 }

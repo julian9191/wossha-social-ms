@@ -59,10 +59,9 @@ export class FollowUserCommand implements ICommand<FollowUser> {
         this.data.uuid = uuidv4();
         this.data.state = 0;
 
-        console.log("aaa");
         let resu = await this.repo.add(this.data);
-        console.log("bbb: "+resu);
-        result.message = "La solicitud para seguir al usuario "+ this.data.receiverUsername + " se ha enviado";
+        
+        result.setMessage("La solicitud para seguir al usuario "+ this.data.receiverUsername + " se ha enviado");
         let notificacion: Notification = this.createFollowRequestNotificationDto(this.sesionInfo.username, this.data.senderName, this.data.senderPicture, this.data.receiverUsername);
 
         this.repo.addNotification(notificacion);
