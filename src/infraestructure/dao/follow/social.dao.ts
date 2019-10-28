@@ -115,6 +115,28 @@ export class SocialDao extends BaseDao {
         }
     }
 
+    public async changeNotifToViewed(username: string, ids: string[]) : Promise<boolean>{
+        try {
+            let query = `UPDATE TWSS_NOTIFICATIONS
+            SET VIEWED = 1
+            WHERE RECEIVER_USERNAME = :username`;
+            query += ids.length!=0 ? " AND ID IN (<ids>) " : " ";
+
+            let typesBindMap : Map<string, string[]> = new Map();
+            typesBindMap.set("ids", ids);
+            query = this.generateBingIdentifier(query, typesBindMap);
+
+            let params = new ParamSet();
+            this.addInClauseBind(params, typesBindMap);
+            params.addParam("username", username);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.changeNotifToViewed: ${err}`);
+            return null;
+        }
+    }
+
 
     // REMOVES--------------------------------------------------------------------------------------------------------------------------------------
 

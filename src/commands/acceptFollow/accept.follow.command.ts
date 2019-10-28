@@ -37,28 +37,24 @@ export class AcceptFollowCommand implements ICommand<AcceptFollow> {
     }
     
     public async execute(): Promise<CommandResult> {
-
-        console.log("#######$$$$$$$: "+JSON.stringify(this.data));
-
+        console.log("Start executing command "+JSON.stringify(this.data));
         let result: CommandResult = new CommandResult();
-        console.log("1111");
         await this.repo.changeStateFollowUser(this.data.senderUsername, this.data.username, 1);
-        console.log("2222");
         await this.repo.deleteNotification(this.data.senderUsername, this.data.username, this.data.notificationType);
-        console.log("3333");
+
         let notificacion: Notification = this.createFollowRequestNotificationDto(this.sesionInfo.username, (this.sesionInfo.firstName + (" " + this.sesionInfo.lastName)), this.sesionInfo.profilePicture, this.data.senderUsername);
-        console.log("4444");
         await this.repo.addNotification(notificacion);
-        console.log("5555");
+
         let acceptFollowMessage: AcceptFollowMessage = new AcceptFollowMessage(this.sesionInfo.username, this.data.senderUsername, notificacion);
         /*let user: WsUser = DynamoDbDao.getConnection(this.data.getSenderUsername());
         if ((user != null)) {
             let destinationConnectionId: string = user.getConnectionId();
             ServiceAPIUtil.callAPI(WS_ENDPOINT, destinationConnectionId, acceptFollowMessage);
         }*/
-        console.log("6666");
+
         result.setMessage("Ahora @" + this.data.senderUsername + " te sigue");
-        console.log("7777");
+
+        console.log("finish executing command "+JSON.stringify(this.data)+" with result: "+JSON.stringify(result));
         return result;
     }
     

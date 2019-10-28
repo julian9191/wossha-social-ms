@@ -217,6 +217,7 @@ export class SocialRepository implements IRepository<FollowUser> {
     public async changeNotifToViewed(username: string, ids/*: List<string>*/) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.changeNotifToViewed(this.dbi, username, ids);
+        return await this.socialDao.changeNotifToViewed(username, ids);
     }
     
     public async update(clothe: FollowUser) {
