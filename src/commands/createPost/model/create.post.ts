@@ -1,4 +1,4 @@
-import { PictureFileDTO } from "../../../dto/picture.file.dto";
+import { PictureFileDTO } from "wossha-msbase-lib";
 
 export class CreatePost {
     

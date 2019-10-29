@@ -1,9 +1,9 @@
 import * as Express from "express";
 import { CommandSerializers } from "./command.serializers";
-import { UserSessionInfo } from "../dto/user.session.info";
+import { UserSessionInfo } from "wossha-msbase-lib";
 import { CommandResult, ICommand, ICommandSerializer } from "wossha-msbase-lib";
 import { Event } from "../infraestructure/event/event";
-import { ControllerWrapper } from "../resources/controller.wrapper";
+import { ControllerWrapper } from "wossha-msbase-lib";
 import { Globals } from "../globals";
 var AWS = require('aws-sdk');
 

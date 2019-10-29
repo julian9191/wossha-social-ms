@@ -1,7 +1,7 @@
 import { CommandResult, ICommand } from "wossha-msbase-lib";
 import { Inject } from "typescript-ioc";
 import { SocialRepository } from "../../infraestructure/repositories/social.repository";
-import { UserSessionInfo } from "../../dto/user.session.info";
+import { UserSessionInfo } from "wossha-msbase-lib";
 import { CreatePost } from "./model/create.post";
 import { Post } from "../../dto/post/post";
 import { PostFactory } from "../../infraestructure/factories/post.factory";
@@ -9,10 +9,10 @@ import { PostTypesEnum } from "../../infraestructure/enums/post.types.enum";
 import { Attachment } from "../../dto/post/attachment";
 import { Event } from "../../infraestructure/event/event";
 import uuidv4  from "uuid/v4";
-import { PictureFileDTO } from "../../dto/picture.file.dto";
+import { PictureFileDTO } from "wossha-msbase-lib";
 import { SavePictureEvent } from "../../infraestructure/event/save.picture.event";
 import { PictureInfo } from "../../infraestructure/event/picture.info";
-import { PictureTypesEnum } from "../../infraestructure/enums/picture.types.enum";
+import { PictureTypesEnum } from "wossha-msbase-lib";
 import { Message } from "../../infraestructure/event/message";
 import { Globals } from "../../globals";
 

@@ -1,4 +1,3 @@
-
 export enum NotificationsEnum {
     FOLLOW_REQUEST="FOLLOW_REQUEST",
     ACCEPT_FOLLOW="FOLLOW_REQUEST",

@@ -1,7 +1,7 @@
 import { CommandResult, ICommand } from "wossha-msbase-lib";
 import { Inject } from "typescript-ioc";
 import { SocialRepository } from "../../infraestructure/repositories/social.repository";
-import { UserSessionInfo } from "../../dto/user.session.info";
+import { UserSessionInfo } from "wossha-msbase-lib";
 import { ChangeNotifToViewed } from "./model/change.notifTo.viewed";
 
 export class ChangeNotifToViewedCommand implements ICommand<ChangeNotifToViewed> {

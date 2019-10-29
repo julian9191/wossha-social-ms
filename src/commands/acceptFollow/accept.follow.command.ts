@@ -2,7 +2,7 @@
 import { CommandResult, ICommand } from "wossha-msbase-lib";
 import { Inject } from "typescript-ioc";
 import { SocialRepository } from "../../infraestructure/repositories/social.repository";
-import { UserSessionInfo } from "../../dto/user.session.info";
+import { UserSessionInfo } from "wossha-msbase-lib";
 import { Notification } from "../../dto/notification";
 import { NotificationsEnum } from "../../infraestructure/enums/notifications.enum";
 import { AcceptFollowMessage } from "../../dto/websocket/accept.follow.message";

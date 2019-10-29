@@ -8,7 +8,6 @@ export class Notification {
     public senderPicture: string;
     public viewed: boolean;
     public opend: boolean;
-    
     //  Formats output date when this DTO is passed through JSON
     //@JsonFormat(pattern="yyyy-MM-dd HH:mm")
     public created: Date;

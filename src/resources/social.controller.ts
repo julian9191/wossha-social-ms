@@ -3,7 +3,6 @@ import { FollowingUser } from "../dto/following.user";
 import { SocialRepository } from "../infraestructure/repositories/social.repository";
 var AWS = require('aws-sdk');
 
-
 var sqs = new AWS.SQS({region : 'us-east-1'});
 const router = Express.Router();
 const PREFIX : string = "/social";
