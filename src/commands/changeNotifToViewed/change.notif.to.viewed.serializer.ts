@@ -1,6 +1,5 @@
-import { ICommandSerializer } from "../Icommand.serializer";
+import { ICommand, ICommandSerializer } from "wossha-msbase-lib";
 import { Inject } from "typescript-ioc";
-import { ICommand } from "../icommand";
 import { ChangeNotifToViewedCommand } from "./change.notif.to.viewed.command";
 import { ChangeNotifToViewed } from "./model/change.notifTo.viewed";
 

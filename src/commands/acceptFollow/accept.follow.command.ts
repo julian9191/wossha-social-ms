@@ -1,7 +1,7 @@
-import { ICommand } from "../icommand";
+
+import { CommandResult, ICommand } from "wossha-msbase-lib";
 import { Inject } from "typescript-ioc";
 import { SocialRepository } from "../../infraestructure/repositories/social.repository";
-import { CommandResult } from "../command.result";
 import { UserSessionInfo } from "../../dto/user.session.info";
 import { Notification } from "../../dto/notification";
 import { NotificationsEnum } from "../../infraestructure/enums/notifications.enum";

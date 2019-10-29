@@ -1,13 +1,7 @@
-import { ICommand } from "../icommand";
+import { CommandResult, ICommand } from "wossha-msbase-lib";
 import { Inject } from "typescript-ioc";
 import { SocialRepository } from "../../infraestructure/repositories/social.repository";
-import { CommandResult } from "../command.result";
 import { UserSessionInfo } from "../../dto/user.session.info";
-import uuidv4  from "uuid/v4";
-import { Notification } from "../../dto/notification";
-import { FollowRequestNotifMessage } from "../../dto/websocket/follow.request.notif.message";
-import { WsUser } from "../../dto/websocket/ws.user";
-import { NotificationsEnum } from "../../infraestructure/enums/notifications.enum";
 import { ChangeNotifToViewed } from "./model/change.notifTo.viewed";
 
 export class ChangeNotifToViewedCommand implements ICommand<ChangeNotifToViewed> {

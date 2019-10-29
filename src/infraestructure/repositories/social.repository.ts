@@ -4,6 +4,7 @@ import { SocialDao } from "../dao/follow/social.dao";
 import { Inject } from "typescript-ioc";
 import { FollowUser } from "../../commands/followUser/model/follow.user";
 import { Notification } from "../../dto/notification";
+import { Post } from "../../dto/post/post";
 
 export class SocialRepository implements IRepository<FollowUser> {
     
@@ -23,7 +24,7 @@ export class SocialRepository implements IRepository<FollowUser> {
         return await this.socialDao.addNotification(notificacion);
     }
     
-    public async addPost(/*post: Post*/) {
+    public async addPost(post: Post) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.addPost(post);
     }

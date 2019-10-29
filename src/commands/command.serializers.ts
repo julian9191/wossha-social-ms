@@ -1,4 +1,4 @@
-import { ICommandSerializer } from "./Icommand.serializer";
+import { ICommandSerializer } from "wossha-msbase-lib";
 import { FollowUserSerializer } from "./followUser/follow.user.serializer";
 import { Inject } from "typescript-ioc";
 import { AcceptFollowSerializer } from "./acceptFollow/accept.follow.serializer";

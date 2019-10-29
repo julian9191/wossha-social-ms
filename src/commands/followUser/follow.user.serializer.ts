@@ -1,8 +1,7 @@
-import { ICommandSerializer } from "../Icommand.serializer";
+import { ICommand, ICommandSerializer } from "wossha-msbase-lib";
 import { FollowUser } from "./model/follow.user";
 import { Inject } from "typescript-ioc";
 import { FollowUserCommand } from "./follow.user.command";
-import { ICommand } from "../icommand";
 
 export class FollowUserSerializer implements ICommandSerializer<FollowUser> {
     

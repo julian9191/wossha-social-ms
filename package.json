@@ -16,7 +16,8 @@
     "serverless-plugin-typescript-express": "^1.0.8",
     "source-map-support": "^0.5.10",
     "typescript-ioc": "^1.2.5",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "wossha-msbase-lib": "0.0.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
