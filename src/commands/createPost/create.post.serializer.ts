@@ -3,7 +3,7 @@ import { Inject } from "typescript-ioc";
 import { CreatePost } from "./model/create.post";
 import { CreatePostCommand } from "./create.post.command";
 
-export class ChangeNotifToViewedSerializer implements ICommandSerializer<CreatePost> {
+export class CreatePostSerializer implements ICommandSerializer<CreatePost> {
     
     @Inject
     private command: CreatePostCommand;

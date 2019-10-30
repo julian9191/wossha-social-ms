@@ -2,7 +2,7 @@ import * as Express from "express";
 import { CommandSerializers } from "./command.serializers";
 import { UserSessionInfo } from "wossha-msbase-lib";
 import { CommandResult, ICommand, ICommandSerializer } from "wossha-msbase-lib";
-import { Event } from "../infraestructure/event/event";
+import { Event } from "wossha-jsonevents-lib";
 import { ControllerWrapper } from "wossha-msbase-lib";
 import { Globals } from "../globals";
 var AWS = require('aws-sdk');
@@ -30,6 +30,7 @@ router.post(PREFIX+"/commands", async (req: /*Express.Request*/any, res: Express
         res.status(200).json(ControllerWrapper.wrapMessaje(result.getMessage(), result.getResponse()));
 
     } catch(error) {
+        console.error(error);
         res.status(500).json(ControllerWrapper.wrapMessaje(error+"", null))
     }
 });

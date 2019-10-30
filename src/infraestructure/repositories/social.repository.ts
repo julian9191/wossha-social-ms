@@ -5,6 +5,7 @@ import { Inject } from "typescript-ioc";
 import { FollowUser } from "../../commands/followUser/model/follow.user";
 import { Notification } from "../../dto/notification";
 import { Post } from "../../dto/post/post";
+import { Attachment } from "../../dto/post/attachment";
 
 export class SocialRepository implements IRepository<FollowUser> {
     
@@ -25,16 +26,13 @@ export class SocialRepository implements IRepository<FollowUser> {
     }
     
     public async addPost(post: Post) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.addPost(post);
+        return await this.socialDao.addPost(post);
     }
     
-    public async addMentionedUsers(mentionedUsers/*: List<string>*/, uuidPost: string) {
-        /*this.socialDao = this.dbi.onDemand(SocialDao.class);
-        for (let mentionedUser: string in mentionedUsers) {
-            this.socialDao.addMentionedUser(mentionedUser, uuidPost);
+    public async addMentionedUsers(mentionedUsers: string[], uuidPost: string) {
+        for (let mentionedUser of mentionedUsers) {
+            await this.socialDao.addMentionedUser(mentionedUser, uuidPost)
         }
-        */
     }
     
     public async addReaction(reaction/*: Reaction*/) {
@@ -42,17 +40,14 @@ export class SocialRepository implements IRepository<FollowUser> {
         //this.socialDao.addReaction(reaction);
     }
     
-    public async addAttachments(attachments/*: List<Attachment>*/) {
-        /*this.socialDao = this.dbi.onDemand(SocialDao.class);
-        for (let attachment: Attachment in attachments) {
-            this.socialDao.addAttachments(attachment);
+    public async addAttachments(attachments: Attachment[]) {
+        for (const attachment of attachments) {
+            await this.socialDao.addAttachments(attachment);
         }
-        */
     }
     
-    public async addAttachment(attachment/*: Attachment*/) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.addAttachments(attachment);
+    public async addAttachment(attachment: Attachment) {
+        return await this.socialDao.addAttachments(attachment);
     }
     
     public async getFollowersRelationship(senderUsername: string, receiverUsername: string): Promise<FollowUser[]> {

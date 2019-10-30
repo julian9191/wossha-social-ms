@@ -7,16 +7,30 @@ import { SharePost } from "../../commands/sharePost/model/share.post";
 export class PostFactory {
     
     public static createPost(createPost: CreatePost): Post {
+
         let post: Post = new Post(uuidv4());
+
         post.username = createPost.username;
-        if ((!createPost.images || createPost.images.length>0) && 
+
+        console.log("!!!!: "+JSON.stringify(createPost))
+
+        console.log("---!createPost.images: "+!createPost.images)
+        console.log("---createPost.images.length==0: "+(createPost.images.length==0))
+        console.log("---!createPost.videoCode: "+!createPost.videoCode)
+        console.log("---createPost.videoCode == '': "+(createPost.videoCode == ""))
+
+        if ((!createPost.images || createPost.images.length==0) && 
             (!createPost.videoCode || createPost.videoCode == "")) {
+
+            console.log("#### SIMPLE_POST");
             post.type = PostTypesEnum.SIMPLE_POST;
         }
         else if (createPost.videoCode && createPost.videoCode != "") {
+            console.log("#### VIDEO_POST");
             post.type = PostTypesEnum.VIDEO_POST;
         }
         else {
+            console.log("#### IMAGE_POST");
             post.type = PostTypesEnum.IMAGE_POST;
         }
         

@@ -13,7 +13,7 @@ provider:
     
 
 functions:
-  hello:
+  wosshaSocialLambda:
     handler: src/server.handler
     role: ${self:provider.role}
     name: ${self:provider.stage}-${self:service.name}-lambda

@@ -5,6 +5,8 @@ import { ParamSet } from "../param.set";
 import { FollowUserMapper } from './follow.user.mapper';
 import { FollowUser } from '../../../commands/followUser/model/follow.user';
 import { Notification } from '../../../dto/notification';
+import { Post } from '../../../dto/post/post';
+import { Attachment } from '../../../dto/post/attachment';
 
 export class SocialDao extends BaseDao {
 
@@ -87,14 +89,70 @@ export class SocialDao extends BaseDao {
             params.addParam("receiverUsername", followUser.receiverUsername);
             params.addParam("state", followUser.state+"");
 
-            console.log("%%%&&&+++: "+query+", "+JSON.stringify(params));
-
             return this.execute(query, params);
         } catch (err) {
             console.log(`Error ocurred when trying to excecute the query in SocialDao.add: ${err}`);
             return null;
         }
     }
+
+    public async addPost(post: Post) : Promise<boolean>{
+        try {
+            let query = `Insert into TWSS_POSTS 
+            (UUID,TYPE,USERNAME,TEXT,UUID_PARENT,UUID_ORIGINAL_POST) values 
+            (:uuid, :type, :username, :text, :uuidParent, :uuidOriginalPost)`;
+
+            let params = new ParamSet();
+            params.addParam("uuid", post.uuid);
+            params.addParam("type", post.type);
+            params.addParam("username", post.username);
+            params.addParam("text", post.text);
+            params.addParam("uuidParent", post.uuidParent);
+            params.addParam("uuidOriginalPost", post.uuidOriginalPost);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.addPost: ${err}`);
+            return null;
+        }
+    }
+
+    public async addMentionedUser(mentionedUser: string, uuidPost: string) : Promise<boolean>{
+        try {
+            let query = `Insert into TWSS_MENTIONED_USERS_POST 
+            (UUID_POST,USERNAME) values (:uuidPost, :mentionedUser)`;
+
+            let params = new ParamSet();
+            params.addParam("uuidPost", uuidPost);
+            params.addParam("mentionedUser", mentionedUser);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.addMentionedUser: ${err}`);
+            return null;
+        }
+    }
+
+    public async addAttachments(attachment: Attachment) : Promise<boolean>{
+        try {
+            let query = `Insert into TWSS_ATTACHMENTS 
+            (UUID,TYPE,UUID_POST,URL,USERNAME) values 
+            (:uuid, :type, :uuidPost, :url, :username)`;
+
+            let params = new ParamSet();
+            params.addParam("uuid", attachment.uuid);
+            params.addParam("type", attachment.type);
+            params.addParam("uuidPost", attachment.uuidPost);
+            params.addParam("url", attachment.url);
+            params.addParam("username", attachment.username);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.addAttachments: ${err}`);
+            return null;
+        }
+    }
+
 
     // UPDATES--------------------------------------------------------------------------------------------------------------------------------------
 

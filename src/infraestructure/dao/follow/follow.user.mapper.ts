@@ -15,7 +15,6 @@ export class FollowUserMapper implements ResultSetMapper<FollowUser>{
                 result[i]["RECEIVER_USERNAME"],
                 result[i]["STATE"]
             );
-
             array.push(followingUser);
         }
 

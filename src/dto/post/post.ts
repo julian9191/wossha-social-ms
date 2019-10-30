@@ -49,7 +49,7 @@ export class Post {
     }*/
     
     public constructor (uuid: string) {
-        this.uuid = this.uuid;
+        this.uuid = uuid;
     }
     
 }

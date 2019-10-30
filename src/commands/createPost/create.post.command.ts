@@ -7,13 +7,13 @@ import { Post } from "../../dto/post/post";
 import { PostFactory } from "../../infraestructure/factories/post.factory";
 import { PostTypesEnum } from "../../infraestructure/enums/post.types.enum";
 import { Attachment } from "../../dto/post/attachment";
-import { Event } from "../../infraestructure/event/event";
+import { Event } from "wossha-jsonevents-lib/dist/events/api/event";
 import uuidv4  from "uuid/v4";
 import { PictureFileDTO } from "wossha-msbase-lib";
-import { SavePictureEvent } from "../../infraestructure/event/save.picture.event";
-import { PictureInfo } from "../../infraestructure/event/picture.info";
+import { SavePictureEvent } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/save.picture.event";
+import { PictureInfo } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/picture.info";
 import { PictureTypesEnum } from "wossha-msbase-lib";
-import { Message } from "../../infraestructure/event/message";
+import { Message } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/message";
 import { Globals } from "../../globals";
 
 export class CreatePostCommand implements ICommand<CreatePost> {
@@ -44,23 +44,27 @@ export class CreatePostCommand implements ICommand<CreatePost> {
         let result: CommandResult = new CommandResult();
         let createPostResponse: CreatePostResponse = new CreatePostResponse();
         let post: Post = PostFactory.createPost(this.data);
+        
+        console.log(">>>> "+JSON.stringify(post));
+        
         await this.repo.addPost(post);
         if (post.mentionedUsers && post.mentionedUsers.length > 0) {
-            this.repo.addMentionedUsers(post.mentionedUsers, post.uuid);
+            await this.repo.addMentionedUsers(post.mentionedUsers, post.uuid);
         }
         
-        if (post.type = PostTypesEnum.IMAGE_POST) {
+        console.log(">>>>111 "+PostTypesEnum.IMAGE_POST);
+        if (post.type == PostTypesEnum.IMAGE_POST) {
             console.log("1. postType: " + post.type);
             let attachments: Attachment[] = this.getAttachments(this.data.images, post);
-            this.repo.addAttachments(attachments);
+            await this.repo.addAttachments(attachments);
             createPostResponse.attachments = attachments;
             let savePictureEvent: Event = this.generateSavePictureEvent(attachments);
             result.addEvent(savePictureEvent);
         }
-        else if (post.type = PostTypesEnum.VIDEO_POST) {
+        else if (post.type == PostTypesEnum.VIDEO_POST) {
             console.log("2. postType: " + post.type);
             let attachment: Attachment = new Attachment(null, uuidv4(), PostTypesEnum.VIDEO_POST, post.uuid, this.data.videoCode, this.sesionInfo.username, null, null);
-            this.repo.addAttachment(attachment);
+            await this.repo.addAttachment(attachment);
             let attachments: Attachment[] = [];
             attachments.push(attachment);
             createPostResponse.attachments = attachments;
@@ -95,9 +99,9 @@ export class CreatePostCommand implements ICommand<CreatePost> {
         
         let message: Message = new Message();
         message.pictures = pictures;
-        SavePictureEvent;
-        new SavePictureEvent(Globals.APP_NAME, this.sesionInfo.username, message);
-        return;
+        let savePictureEvent = new SavePictureEvent(Globals.APP_NAME, this.sesionInfo.username);
+        savePictureEvent.message = message;
+        return savePictureEvent;
     }
     
     private pushInS3(image: PictureFileDTO, uuid: string) {
@@ -114,6 +118,6 @@ export class CreatePostCommand implements ICommand<CreatePost> {
 }
 
 export class CreatePostResponse {
-    public uuidPost: string;
-    public attachments: Attachment[];
+    public uuidPost: string = null;
+    public attachments: Attachment[] = null;
 }
