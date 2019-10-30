@@ -7,14 +7,17 @@ import { Post } from "../../dto/post/post";
 import { PostFactory } from "../../infraestructure/factories/post.factory";
 import { PostTypesEnum } from "../../infraestructure/enums/post.types.enum";
 import { Attachment } from "../../dto/post/attachment";
-import { Event } from "wossha-jsonevents-lib/dist/events/api/event";
 import uuidv4  from "uuid/v4";
 import { PictureFileDTO } from "wossha-msbase-lib";
+import { PictureTypesEnum } from "wossha-msbase-lib";
+import { Globals } from "../../globals";
+import { S3Uploader } from "../../infraestructure/s3/s3.uploader";
+
 import { SavePictureEvent } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/save.picture.event";
 import { PictureInfo } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/picture.info";
-import { PictureTypesEnum } from "wossha-msbase-lib";
+import { Event } from "wossha-jsonevents-lib/dist/events/api/event";
 import { Message } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/message";
-import { Globals } from "../../globals";
+
 
 export class CreatePostCommand implements ICommand<CreatePost> {
     
@@ -23,6 +26,7 @@ export class CreatePostCommand implements ICommand<CreatePost> {
     
     @Inject
     private repo: SocialRepository;
+    private S3Uploader: S3Uploader = new S3Uploader();
     
     public commandName(): string {
         return "CreatePost";
@@ -45,17 +49,14 @@ export class CreatePostCommand implements ICommand<CreatePost> {
         let createPostResponse: CreatePostResponse = new CreatePostResponse();
         let post: Post = PostFactory.createPost(this.data);
         
-        console.log(">>>> "+JSON.stringify(post));
-        
         await this.repo.addPost(post);
         if (post.mentionedUsers && post.mentionedUsers.length > 0) {
             await this.repo.addMentionedUsers(post.mentionedUsers, post.uuid);
         }
         
-        console.log(">>>>111 "+PostTypesEnum.IMAGE_POST);
         if (post.type == PostTypesEnum.IMAGE_POST) {
             console.log("1. postType: " + post.type);
-            let attachments: Attachment[] = this.getAttachments(this.data.images, post);
+            let attachments: Attachment[] = await this.getAttachments(this.data.images, post);
             await this.repo.addAttachments(attachments);
             createPostResponse.attachments = attachments;
             let savePictureEvent: Event = this.generateSavePictureEvent(attachments);
@@ -78,10 +79,12 @@ export class CreatePostCommand implements ICommand<CreatePost> {
         return result;
     }
     
-    private getAttachments(images: PictureFileDTO[], post: Post): Attachment[] {
+    private async getAttachments(images: PictureFileDTO[], post: Post): Promise<Attachment[]> {
         let attachments: Attachment[] = [];
-        for (let image in images) {
+        for (let i = 0; i < images.length; i++) {
             let attachment: Attachment = new Attachment(null, uuidv4(), PostTypesEnum.IMAGE_POST, post.uuid, uuidv4(), this.sesionInfo.username, null, null);
+            // push image into S3
+            await this.S3Uploader.save(this.data.images[i], attachment.url);
             attachments.push(attachment);
         }
         
@@ -90,29 +93,16 @@ export class CreatePostCommand implements ICommand<CreatePost> {
     
     private generateSavePictureEvent(attachments: Attachment[]): SavePictureEvent {
         let pictures: PictureInfo[] = [];
+
         for (let i = 0; i < attachments.length; i++) {
-            // push image into S3
-            //this.pushInS3(this.data.getImages().get(i), attachments.get(i).getUrl());
             let pictureInfo: PictureInfo = new PictureInfo(attachments[i].url, this.data.images[i].filename, this.data.images[i].filetype, PictureTypesEnum.POST_PICTURE, this.data.images[i].size, null);
             pictures.push(pictureInfo);
         }
-        
         let message: Message = new Message();
         message.pictures = pictures;
         let savePictureEvent = new SavePictureEvent(Globals.APP_NAME, this.sesionInfo.username);
         savePictureEvent.message = message;
         return savePictureEvent;
-    }
-    
-    private pushInS3(image: PictureFileDTO, uuid: string) {
-        /*try {
-            let fis: InputStream = WosshaTool.getPictureInpurStream(image.getValue());
-            this.uploadObject.save(fis, uuid);
-        }
-        catch (e) {
-            System.out.println(e.getMessage());
-        }*/
-        
     }
 
 }
