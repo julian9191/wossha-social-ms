@@ -1,14 +1,14 @@
-//@DynamoDBTable(tableName="ws_users")
+import {
+    table,
+    hashKey,
+} from '@aws/dynamodb-data-mapper-annotations';
+
+@table('ws_users')
 export class WsUser {
-    
-    //@DynamoDBHashKey()
+
+    @hashKey()
     public username: string;
     
-    //@DynamoDBHashKey()
-    public ConnectionId: string;
-    
-    public constructor (username: string, connectionId: string) {
-        this.username = this.username;
-        this.ConnectionId = connectionId;
-    }
+    @hashKey()
+    public ConnectionId: string
 }

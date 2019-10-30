@@ -7,6 +7,8 @@ import { Notification } from "../../dto/notification";
 import { NotificationsEnum } from "../../infraestructure/enums/notifications.enum";
 import { AcceptFollowMessage } from "../../dto/websocket/accept.follow.message";
 import { AcceptFollow } from "./model/accept.follow";
+import { WsUser } from "../../dto/websocket/ws.user";
+import { DynamoDbDao } from "../../infraestructure/dao/dynamo.db.dao";
 
 
 export class AcceptFollowCommand implements ICommand<AcceptFollow> {
@@ -19,6 +21,7 @@ export class AcceptFollowCommand implements ICommand<AcceptFollow> {
     
     @Inject
     private repo: SocialRepository;
+    private dynamoDbDao: DynamoDbDao = new DynamoDbDao();
     
     public commandName(): string {
         return "AcceptFollow";
@@ -46,8 +49,11 @@ export class AcceptFollowCommand implements ICommand<AcceptFollow> {
         await this.repo.addNotification(notificacion);
 
         let acceptFollowMessage: AcceptFollowMessage = new AcceptFollowMessage(this.sesionInfo.username, this.data.senderUsername, notificacion);
-        /*let user: WsUser = DynamoDbDao.getConnection(this.data.getSenderUsername());
-        if ((user != null)) {
+        
+        console.log("111111111111")
+        let user: WsUser = await this.dynamoDbDao.getConnection(this.data.senderUsername);
+        console.log("222222222: "+JSON.stringify(user));
+        /*if ((user != null)) {
             let destinationConnectionId: string = user.getConnectionId();
             ServiceAPIUtil.callAPI(WS_ENDPOINT, destinationConnectionId, acceptFollowMessage);
         }*/
