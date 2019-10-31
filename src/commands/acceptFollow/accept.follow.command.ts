@@ -50,9 +50,7 @@ export class AcceptFollowCommand implements ICommand<AcceptFollow> {
 
         let acceptFollowMessage: AcceptFollowMessage = new AcceptFollowMessage(this.sesionInfo.username, this.data.senderUsername, notificacion);
         
-        console.log("111111111111")
         let user: WsUser = await this.dynamoDbDao.getConnection(this.data.senderUsername);
-        console.log("222222222: "+JSON.stringify(user));
         /*if ((user != null)) {
             let destinationConnectionId: string = user.getConnectionId();
             ServiceAPIUtil.callAPI(WS_ENDPOINT, destinationConnectionId, acceptFollowMessage);

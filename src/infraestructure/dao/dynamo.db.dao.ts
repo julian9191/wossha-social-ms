@@ -17,17 +17,34 @@ export class DynamoDbDao {
 
     public async saveConnection(username: string, connectionId: string): Promise<any> {
         let user: WsUser = new WsUser();
-        user.ConnectionId = connectionId;
+        user.connectionId = connectionId;
         user.username = username;
 
         return this.mapper.put({item: user});
     }
     
-    public async deleteConnection(username: string, connectionId: string): Promise<any> {
-        let user: WsUser = new WsUser();
-        user.ConnectionId = connectionId;
-        user.username = username;
-        return this.mapper.delete({item: user});
+    public async deleteConnection(username: string, connectionId: string): Promise<Boolean> {
+        var params = {
+            TableName : 'ws_users',
+            Key: {
+              "username": username
+            }
+          };
+
+        let _this = this;
+        let pr = new Promise<boolean>(function(resolve, reject){
+            _this.docClient.delete(params, function(err, data) {
+                if (err) {
+                    console.log("Unable to delete. Error:"+ err);
+                    reject(false);
+                } else {
+                    console.log("Delete succeeded. "+JSON.stringify(data));
+                    resolve(true);
+                }
+            }
+        )});
+
+        return pr;
     }
     
     public async getConnection(username: string): Promise<WsUser> {
@@ -59,14 +76,6 @@ export class DynamoDbDao {
     }
     
     public async getConnectionByConnectionId(connectionId: String): Promise<WsUser> {
-        /*let eav: Map<String, AttributeValue> = new HashMap<String, AttributeValue>();
-        eav.put(":connectionIdVal", (new AttributeValue() + withS(connectionId)));
-        let queryExpression: DynamoDBQueryExpression<WsUser> = (new DynamoDBQueryExpression<WsUser>() + withIndexName("connectionId-index").withConsistentRead(false).withKeyConditionExpression("connectionId = :connectionIdVal").withExpressionAttributeValues(eav));
-        let wsUser: PaginatedQueryList<WsUser> = mapper.query(WsUser.class, queryExpression);
-        let iter: Iterator<WsUser> = wsUser.iterator();
-        while (iter.hasNext()) {
-            return iter.next();
-        }*/
 
         let params = {
             IndexName : "connectionId-index",

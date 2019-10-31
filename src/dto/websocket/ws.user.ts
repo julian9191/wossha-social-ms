@@ -10,5 +10,5 @@ export class WsUser {
     public username: string;
     
     @hashKey()
-    public ConnectionId: string
+    public connectionId: string
 }
