@@ -9,11 +9,12 @@ import { AcceptFollowMessage } from "../../dto/websocket/accept.follow.message";
 import { AcceptFollow } from "./model/accept.follow";
 import { WsUser } from "../../dto/websocket/ws.user";
 import { DynamoDbDao } from "../../infraestructure/dao/dynamo.db.dao";
+import { ServiceAPIUtil } from "../../infraestructure/service/service.api.util";
 
 
 export class AcceptFollowCommand implements ICommand<AcceptFollow> {
     
-    private static WS_ENDPOINT: string = process.env.WS_ENDPOINT;
+    private WS_ENDPOINT: string = process.env.WS_ENDPOINT;
     
     private data: AcceptFollow;
     
@@ -22,6 +23,7 @@ export class AcceptFollowCommand implements ICommand<AcceptFollow> {
     @Inject
     private repo: SocialRepository;
     private dynamoDbDao: DynamoDbDao = new DynamoDbDao();
+    private serviceAPIUtil: ServiceAPIUtil = new ServiceAPIUtil();
     
     public commandName(): string {
         return "AcceptFollow";
@@ -51,10 +53,10 @@ export class AcceptFollowCommand implements ICommand<AcceptFollow> {
         let acceptFollowMessage: AcceptFollowMessage = new AcceptFollowMessage(this.sesionInfo.username, this.data.senderUsername, notificacion);
         
         let user: WsUser = await this.dynamoDbDao.getConnection(this.data.senderUsername);
-        /*if ((user != null)) {
-            let destinationConnectionId: string = user.getConnectionId();
-            ServiceAPIUtil.callAPI(WS_ENDPOINT, destinationConnectionId, acceptFollowMessage);
-        }*/
+        if ((user != null)) {
+            let destinationConnectionId: string = user.connectionId;
+            await this.serviceAPIUtil.callAPI(this.WS_ENDPOINT, destinationConnectionId, acceptFollowMessage);
+        }
 
         result.setMessage("Ahora @" + this.data.senderUsername + " te sigue");
 
