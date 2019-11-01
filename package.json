@@ -19,7 +19,7 @@
     "source-map-support": "^0.5.10",
     "typescript-ioc": "^1.2.5",
     "uuid": "^3.3.3",
-    "wossha-jsonevents-lib": "0.0.7",
+    "wossha-jsonevents-lib": "0.1.0",
     "wossha-msbase-lib": "0.0.2"
   },
   "devDependencies": {

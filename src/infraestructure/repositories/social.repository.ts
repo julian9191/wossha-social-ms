@@ -77,19 +77,19 @@ export class SocialRepository implements IRepository<FollowUser> {
         }
         else {
             let followingUser: List<FollowingUser> = this.getFollowingUsers(username);
-            let followingUsernames: List<string> = followingUser.stream().map( FollowingUser:, :, getUsername).collect(Collectors.toList());
+            let followingUsernames: string[] = followingUser.stream().map( FollowingUser:, :, getUsername).collect(Collectors.toList());
             followingUsernames.add(username);
             count = this.socialDao.countFollowingPosts(this.dbi, username, followingUsernames);
             history = this.socialDao.getFollowingPosts(this.dbi, username, followingUsernames, init, limit);
         }
         
-        let postUuids: List<string> = history.stream().map(Post:, :, getUuid).collect(Collectors.toList());
-        let originalUuidsPosts: List<string> = history.stream().map( Post:, :, getUuidOriginalPost).collect(Collectors.toList());
+        let postUuids: string[] = history.stream().map(Post:, :, getUuid).collect(Collectors.toList());
+        let originalUuidsPosts: string[] = history.stream().map( Post:, :, getUuidOriginalPost).collect(Collectors.toList());
         let comments: List<Post> = this.socialDao.getCommentsByGroup(this.dbi, postUuids);
         // TODO esto en ocasiones no es necesario hacerlo, ya que puede ser que el originalPost est� entre los posts de history
         let originalPosts: List<Post> = this.socialDao.getPostsByGroup(this.dbi, originalUuidsPosts);
-        let commentUuids: List<string> = comments.stream().map( Post:, :, getUuid).collect(Collectors.toList());
-        let originalPostsUuids: List<string> = originalPosts.stream().map(Post:, :, getUuid).collect(Collectors.toList());
+        let commentUuids: string[] = comments.stream().map( Post:, :, getUuid).collect(Collectors.toList());
+        let originalPostsUuids: string[] = originalPosts.stream().map(Post:, :, getUuid).collect(Collectors.toList());
         if (((commentUuids != null) 
                     && !commentUuids.isEmpty())) {
             postUuids.addAll(commentUuids);
@@ -142,9 +142,8 @@ export class SocialRepository implements IRepository<FollowUser> {
         return resultMap;*/
     }
     
-    public async getOwnPosts(uuidPosts/*: List<string>*/, username: string)/*: List<string>*/ {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //return this.socialDao.getOwnPosts(this.dbi, uuidPosts, username);
+    public async getOwnPosts(uuidPosts: string[], username: string): Promise<string[]> {
+        return await this.socialDao.getOwnPosts(uuidPosts, username);
     }
     
     public async getReactionByType(username: string, uuidPost: string, reactionType: string)/*: Reaction*/ {
@@ -190,29 +189,23 @@ export class SocialRepository implements IRepository<FollowUser> {
         //this.socialDao.removeReaction(username, uuidPost, reactionType);
     }
     
-    public async deleteAllReactions(uuidPosts/*: List<string>*/) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.deleteAllReactions(this.dbi, uuidPosts);
+    public async deleteAllReactions(uuidPosts: string[]) {
+        return await this.socialDao.deleteAllReactions(uuidPosts);
     }
     
-    public async deleteAllMentionedUsers(uuidPosts/*: List<string>*/) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.deleteAllMentionedUsers(this.dbi, uuidPosts);
+    public async deleteAllMentionedUsers(uuidPosts: string[]) {
+        return await this.socialDao.deleteAllMentionedUsers(uuidPosts);
     }
     
-    public async deleteAttachments(uuidPosts/*: List<string>*/, username: string) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.deleteAttachments(this.dbi, username, uuidPosts);
+    public async deleteAttachments(uuidPosts: string[], username: string) {
+        return await this.socialDao.deleteAttachments(uuidPosts, username);
     }
     
-    public async deletePosts(uuidPosts/*: List<string>*/, username: string) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.deletePosts(this.dbi, username, uuidPosts);
+    public async deletePosts(uuidPosts: string[], username: string) {
+        return await this.socialDao.deletePosts(uuidPosts, username);
     }
     
-    public async changeNotifToViewed(username: string, ids/*: List<string>*/) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.changeNotifToViewed(this.dbi, username, ids);
+    public async changeNotifToViewed(username: string, ids/*: string[]*/) {
         return await this.socialDao.changeNotifToViewed(username, ids);
     }
     

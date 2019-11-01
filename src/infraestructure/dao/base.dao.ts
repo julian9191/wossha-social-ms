@@ -112,22 +112,35 @@ export class BaseDao {
         
         let $this = this;
         let pr = new Promise<T[]>(function(resolve, reject){
-            
-            $this.connection.execute(query, paramSet).then(function(data){
+            $this.connection.execute(query, paramSet).then(function(data:oracledb.Result<any>){
                 let result = [];
-				if(data.rows.length>0){
-					for (let i = 0; i < data.rows.length; i++) {
-						for (let j = 0; j < data.metaData.length; j++) {
-							if(!result[i]){
-								result[i] = [];
-							}
-							result[i][data.metaData[j].name.toUpperCase()] = data.rows[i][j];
-						}
-					}
+
+                if(!mapper && data.rows.length>0){
+                    let array: any[] = [];
+
+                    for (let i = 0; i < data.rows.length; i++) {
+                        if(data.rows[i].length>0){
+                            array.push(data.rows[i][0])
+                        }
+                        
+                    }
+                    resolve(array); 
+
+                }else if(data.rows.length>0){
+                    if(mapper){
+                        for (let i = 0; i < data.rows.length; i++) {
+                            for (let j = 0; j < data.metaData.length; j++) {
+                                if(!result[i]){
+                                    result[i] = [];
+                                }
+                                result[i][data.metaData[j].name.toUpperCase()] = data.rows[i][j];
+                            }
+                        }
+                    }
 				}
 
                 resolve(mapper.map(result));
-                
+
             }).catch(err => reject(err))
         });
 

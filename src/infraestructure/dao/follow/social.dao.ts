@@ -51,6 +51,26 @@ export class SocialDao extends BaseDao {
         }
     }
 
+    public async getOwnPosts(uuidPosts: string[], username: string) : Promise<string[]>{
+        try {
+            let query = `SELECT UUID FROM TWSS_POSTS P 
+            WHERE P.UUID IN (<uuidPosts>) AND USERNAME = :username`;
+
+            let typesBindMap : Map<string, string[]> = new Map();
+            typesBindMap.set("uuidPosts", uuidPosts);
+            query = this.generateBingIdentifier(query, typesBindMap);
+
+            let params = new ParamSet();
+            this.addInClauseBind(params, typesBindMap);
+            params.addParam("username", username);
+
+            return this.executeQuery(query, params, null);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.getOwnPosts: ${err}`);
+            return null;
+        }
+    }
+
     // INSERTS--------------------------------------------------------------------------------------------------------------------------------------
     
     public async addNotification(notificacion: Notification) : Promise<boolean>{
@@ -58,8 +78,6 @@ export class SocialDao extends BaseDao {
             let query = `Insert into TWSS_NOTIFICATIONS 
             (TYPE,RECEIVER_USERNAME,SENDER_USERNAME,SENDER_NAME,SENDER_PICTURE,VIEWED,OPENED) 
             values (:type,:receiverUserName,:senderUserName,:senderName,:senderPicture,:viewed,:opend)`;
-
-            console.log("aaaaa: "+JSON.stringify(notificacion));
 
             let params = new ParamSet();
             params.addParam("type", notificacion.type);
@@ -215,4 +233,79 @@ export class SocialDao extends BaseDao {
         }
     }
 
+    public async deleteAttachments(uuidPosts: string[], username: string) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_ATTACHMENTS WHERE 
+                        USERNAME=:username AND UUID_POST IN (<uuidPosts>)`;
+
+            let typesBindMap : Map<string, string[]> = new Map();
+            typesBindMap.set("uuidPosts", uuidPosts);
+            query = this.generateBingIdentifier(query, typesBindMap);
+
+            let params = new ParamSet();
+            this.addInClauseBind(params, typesBindMap);
+            params.addParam("username", username);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.deleteAttachments: ${err}`);
+            return null;
+        }
+    }
+
+    public async deleteAllReactions(uuidPosts: string[]) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_REACTIONS WHERE UUID_POST IN (<uuidPosts>)`;
+
+            let typesBindMap : Map<string, string[]> = new Map();
+            typesBindMap.set("uuidPosts", uuidPosts);
+            query = this.generateBingIdentifier(query, typesBindMap);
+
+            let params = new ParamSet();
+            this.addInClauseBind(params, typesBindMap);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.deleteAllReactions: ${err}`);
+            return null;
+        }
+    }
+
+    public async deleteAllMentionedUsers(uuidPosts: string[]) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_MENTIONED_USERS_POST WHERE UUID_POST IN (<uuidPosts>)`;
+
+            let typesBindMap : Map<string, string[]> = new Map();
+            typesBindMap.set("uuidPosts", uuidPosts);
+            query = this.generateBingIdentifier(query, typesBindMap);
+
+            let params = new ParamSet();
+            this.addInClauseBind(params, typesBindMap);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.deleteAllMentionedUsers: ${err}`);
+            return null;
+        }
+    }
+    
+    public async deletePosts(uuidPosts: string[], username: string) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_POSTS 
+                        WHERE USERNAME=:username AND UUID IN (<uuidPosts>)`;
+
+            let typesBindMap : Map<string, string[]> = new Map();
+            typesBindMap.set("uuidPosts", uuidPosts);
+            query = this.generateBingIdentifier(query, typesBindMap);
+
+            let params = new ParamSet();
+            this.addInClauseBind(params, typesBindMap);
+            params.addParam("username", username);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.deletePosts: ${err}`);
+            return null;
+        }
+    }
 }
