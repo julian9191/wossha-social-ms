@@ -45,6 +45,9 @@ export class CreatePostCommand implements ICommand<CreatePost> {
     }
     
     public async execute(): Promise<CommandResult> {
+
+        console.log("Start executing command "+JSON.stringify(this.data));
+
         let result: CommandResult = new CommandResult();
         let createPostResponse: CreatePostResponse = new CreatePostResponse();
         let post: Post = PostFactory.createPost(this.data);
@@ -76,6 +79,8 @@ export class CreatePostCommand implements ICommand<CreatePost> {
         
         createPostResponse.uuidPost = post.uuid;
         result.setResponse(createPostResponse);
+
+        console.log("finish executing command "+JSON.stringify(this.data)+" with result: "+JSON.stringify(result));
         return result;
     }
     

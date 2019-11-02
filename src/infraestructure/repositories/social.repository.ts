@@ -6,6 +6,7 @@ import { FollowUser } from "../../commands/followUser/model/follow.user";
 import { Notification } from "../../dto/notification";
 import { Post } from "../../dto/post/post";
 import { Attachment } from "../../dto/post/attachment";
+import { Reaction } from "../../dto/post/reaction";
 
 export class SocialRepository implements IRepository<FollowUser> {
     
@@ -35,9 +36,10 @@ export class SocialRepository implements IRepository<FollowUser> {
         }
     }
     
-    public async addReaction(reaction/*: Reaction*/) {
+    public async addReaction(reaction: Reaction) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.addReaction(reaction);
+        await this.socialDao.addReaction(reaction);
     }
     
     public async addAttachments(attachments: Attachment[]) {
@@ -151,9 +153,8 @@ export class SocialRepository implements IRepository<FollowUser> {
         //return this.socialDao.getReactionByType(username, uuidPost, reactionType);
     }
     
-    public async getReaction(username: string, uuidPost: string)/*: Reaction*/ {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //return this.socialDao.getReaction(username, uuidPost);
+    public async getReaction(username: string, uuidPost: string): Promise<Reaction[]> {
+        return await this.socialDao.getReaction(username, uuidPost);
     }
     
     public async getUserNotifications(username: string)/*: List<Notification>*/ {
@@ -178,6 +179,7 @@ export class SocialRepository implements IRepository<FollowUser> {
     public async updateReactionType(username: string, uuidPost: string, reactionType: string) {
         //this.socialDao = this.dbi.onDemand(SocialDao.class);
         //this.socialDao.updateReactionType(username, uuidPost, reactionType);
+        return await this.socialDao.updateReactionType(username, uuidPost, reactionType);
     }
     
     public async deleteNotification(senderUsername: string, username: string, notificationType: string) {
@@ -185,8 +187,7 @@ export class SocialRepository implements IRepository<FollowUser> {
     }
     
     public async removeReaction(username: string, uuidPost: string, reactionType: string) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.removeReaction(username, uuidPost, reactionType);
+        return await this.socialDao.removeReaction(username, uuidPost, reactionType);
     }
     
     public async deleteAllReactions(uuidPosts: string[]) {

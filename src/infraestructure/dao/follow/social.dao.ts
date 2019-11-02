@@ -7,11 +7,14 @@ import { FollowUser } from '../../../commands/followUser/model/follow.user';
 import { Notification } from '../../../dto/notification';
 import { Post } from '../../../dto/post/post';
 import { Attachment } from '../../../dto/post/attachment';
+import { Reaction } from '../../../dto/post/reaction';
+import { ReactionMapper } from './reaction.mapper';
 
 export class SocialDao extends BaseDao {
 
     private followingUserMapper: FollowingUserMapper = new FollowingUserMapper();
     private followUserMapper: FollowUserMapper = new FollowUserMapper();
+    private reactionMapper: ReactionMapper = new ReactionMapper();
 
 
     //SELECTS--------------------------------------------------------------------------------------------------------------------------------------
@@ -67,6 +70,22 @@ export class SocialDao extends BaseDao {
             return this.executeQuery(query, params, null);
         } catch (err) {
             console.log(`Error ocurred when trying to excecute the query in SocialDao.getOwnPosts: ${err}`);
+            return null;
+        }
+    }
+
+    public async getReaction(username: string, uuidPost: string) : Promise<Reaction[]>{
+        try {
+            let query = `SELECT * FROM TWSS_REACTIONS WHERE 
+                        USERNAME=:username AND UUID_POST=:uuidPost`;
+
+            let params = new ParamSet();
+            params.addParam("username", username);
+            params.addParam("uuidPost", uuidPost);
+
+            return this.executeQuery(query, params, this.reactionMapper);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.getReaction: ${err}`);
             return null;
         }
     }
@@ -171,6 +190,24 @@ export class SocialDao extends BaseDao {
         }
     }
 
+    public async addReaction(reaction: Reaction) : Promise<boolean>{
+        try {
+            let query = `Insert into TWSS_REACTIONS (UUID,TYPE,UUID_POST,USERNAME) 
+            values (:uuid, :type, :uuidPost, :username)`;
+
+            let params = new ParamSet();
+            params.addParam("uuid", reaction.uuid);
+            params.addParam("type", reaction.type);
+            params.addParam("uuidPost", reaction.uuidPost);
+            params.addParam("username", reaction.username);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.addReaction: ${err}`);
+            return null;
+        }
+    }
+
 
     // UPDATES--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -209,6 +246,23 @@ export class SocialDao extends BaseDao {
             return this.execute(query, params);
         } catch (err) {
             console.log(`Error ocurred when trying to excecute the query in SocialDao.changeNotifToViewed: ${err}`);
+            return null;
+        }
+    }
+
+    public async updateReactionType(username: string, uuidPost: string, reactionType: string) : Promise<boolean>{
+        try {
+            let query = `UPDATE TWSS_REACTIONS SET TYPE = :reactionType 
+                    WHERE USERNAME=:username AND UUID_POST=:uuidPost`;
+
+            let params = new ParamSet();
+            params.addParam("username", username);
+            params.addParam("uuidPost", uuidPost);
+            params.addParam("reactionType", reactionType);
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.updateReactionType: ${err}`);
             return null;
         }
     }
@@ -308,4 +362,23 @@ export class SocialDao extends BaseDao {
             return null;
         }
     }
+
+    public async removeReaction(username: string, uuidPost: string, reactionType: string) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_REACTIONS WHERE 
+                USERNAME=:username AND UUID_POST=:uuidPost AND TYPE=:reactionType`;
+
+            let params = new ParamSet();
+            params.addParam("username", username);
+            params.addParam("uuidPost", uuidPost);
+            params.addParam("reactionType", reactionType);
+    
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.removeReaction: ${err}`);
+            return null;
+        }
+    }
+    
 }

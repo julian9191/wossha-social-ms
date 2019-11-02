@@ -8,15 +8,19 @@ import { Notification } from "../../dto/notification";
 import { FollowRequestNotifMessage } from "../../dto/websocket/follow.request.notif.message";
 import { WsUser } from "../../dto/websocket/ws.user";
 import { NotificationsEnum } from "../../infraestructure/enums/notifications.enum";
+import { DynamoDbDao } from "../../infraestructure/dao/dynamo.db.dao";
+import { ServiceAPIUtil } from "../../infraestructure/service/service.api.util";
 
 export class FollowUserCommand implements ICommand<FollowUser> {
     
-    private static WS_ENDPOINT: string = process.env.WS_ENDPOINT;
+    private WS_ENDPOINT: string = process.env.WS_ENDPOINT;
     private data: FollowUser;
     private sesionInfo: UserSessionInfo;
     
     @Inject
     private repo: SocialRepository;
+    private dynamoDbDao: DynamoDbDao = new DynamoDbDao();
+    private serviceAPIUtil: ServiceAPIUtil = new ServiceAPIUtil();
     
     public commandName(): string {
         return "FollowUser";
@@ -65,13 +69,14 @@ export class FollowUserCommand implements ICommand<FollowUser> {
 
         this.repo.addNotification(notificacion);
         let followRequestNotifMessage: FollowRequestNotifMessage = new FollowRequestNotifMessage(this.data.senderUsername, this.sesionInfo.username, notificacion);
-        /*let user: WsUser = DynamoDbDao.getConnection(this.data.getReceiverUsername());
+
+        let user: WsUser = await this.dynamoDbDao.getConnection(this.data.senderUsername);
         if ((user != null)) {
-            let destinationConnectionId: string = user.getConnectionId();
-            System.out.println(("send messaje to user by ws: " + followRequestNotifMessage.toString()));
-            ServiceAPIUtil.callAPI(WS_ENDPOINT, destinationConnectionId, followRequestNotifMessage);
-            System.out.println("sent messaje to user by ws");
-        }*/
+            let destinationConnectionId: string = user.connectionId;
+            console.log("send messaje to user by ws: " + JSON.stringify(followRequestNotifMessage));
+            await this.serviceAPIUtil.callAPI(this.WS_ENDPOINT, destinationConnectionId, followRequestNotifMessage);
+            console.log("sent messaje to user by ws");
+        }
         
         console.log("finish executing command "+JSON.stringify(this.data)+" with result: "+JSON.stringify(result));
         return result;

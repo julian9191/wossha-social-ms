@@ -5,6 +5,7 @@ import { AcceptFollowSerializer } from "./acceptFollow/accept.follow.serializer"
 import { ChangeNotifToViewedSerializer } from "./changeNotifToViewed/change.notif.to.viewed.serializer";
 import { CreatePostSerializer } from "./createPost/create.post.serializer";
 import { DeletePostSerializer } from "./deletePost/delete.post.serializer";
+import { ReactPostSerializer } from "./reactPost/react.post.serializer";
 
 export class CommandSerializers {
     
@@ -21,12 +22,12 @@ export class CommandSerializers {
     private createPostSerializer: CreatePostSerializer;
     @Inject
     private deletePostSerializer: DeletePostSerializer;
+    @Inject
+    private reactPostSerializer: ReactPostSerializer;
     /*@Inject
     private stopFollowingUserSerializer: StopFollowingUserSerializer;
     @Inject
     private refuseFollowSerializer: RefuseFollowSerializer;
-    @Inject
-    private reactPostSerializer: ReactPostSerializer;
     @Inject
     private sharePostSerializer: SharePostSerializer;*/
 
@@ -40,10 +41,10 @@ export class CommandSerializers {
         this.processors.set("ChangeNotifToViewed", this.changeNotifToViewedSerializer);
         this.processors.set("CreatePost", this.createPostSerializer);
         this.processors.set("DeletePost", this.deletePostSerializer);
+        this.processors.set("ReactPost", this.reactPostSerializer);
         /*this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
         this.processors.set("RefuseFollow", this.refuseFollowSerializer);
-        this.processors.set("SharePost", this.sharePostSerializer);
-        this.processors.set("ReactPost", this.reactPostSerializer);*/
+        this.processors.set("SharePost", this.sharePostSerializer);*/
     }
     
     public get(commandName: String): ICommandSerializer<any> {
