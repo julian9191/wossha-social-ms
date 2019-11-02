@@ -6,17 +6,7 @@ import { ReactPost } from "./model/react.post";
 import { Post } from "../../dto/post/post";
 import { PostFactory } from "../../infraestructure/factories/post.factory";
 import { PostTypesEnum } from "../../infraestructure/enums/post.types.enum";
-import { Attachment } from "../../dto/post/attachment";
 import uuidv4  from "uuid/v4";
-import { PictureFileDTO } from "wossha-msbase-lib";
-import { PictureTypesEnum } from "wossha-msbase-lib";
-import { Globals } from "../../globals";
-import { S3Uploader } from "../../infraestructure/s3/s3.uploader";
-
-import { SavePictureEvent } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/save.picture.event";
-import { PictureInfo } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/picture.info";
-import { Event } from "wossha-jsonevents-lib/dist/events/api/event";
-import { Message } from "wossha-jsonevents-lib/dist/events/pictures/SavePictureEvent/message";
 import { Reaction } from "../../dto/post/reaction";
 
 
@@ -27,7 +17,6 @@ export class ReactPostCommand implements ICommand<ReactPost> {
     
     @Inject
     private repo: SocialRepository;
-    private S3Uploader: S3Uploader = new S3Uploader();
     
     public commandName(): string {
         return "ReactPost";
