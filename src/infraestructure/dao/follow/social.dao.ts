@@ -380,5 +380,22 @@ export class SocialDao extends BaseDao {
             return null;
         }
     }
+
+    public async removeFollowingUser(username: string, followingUserName: string) : Promise<boolean>{
+        try {
+            let query = `DELETE FROM TWSS_FOLLOWERS 
+                WHERE SENDER_USERNAME=:username AND RECEIVER_USERNAME=:followingUserName`;
+
+            let params = new ParamSet();
+            params.addParam("username", username);
+            params.addParam("followingUserName", followingUserName);
+    
+
+            return this.execute(query, params);
+        } catch (err) {
+            console.log(`Error ocurred when trying to excecute the query in SocialDao.removeFollowingUser: ${err}`);
+            return null;
+        }
+    }
     
 }

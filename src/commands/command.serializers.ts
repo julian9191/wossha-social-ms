@@ -8,6 +8,7 @@ import { DeletePostSerializer } from "./deletePost/delete.post.serializer";
 import { ReactPostSerializer } from "./reactPost/react.post.serializer";
 import { RefuseFollowSerializer } from "./refuseFollow/refuse.follow.serializer";
 import { SharePostSerializer } from "./sharePost/share.post.serializer";
+import { StopFollowingUserSerializer } from "./stopFollowingUser/stop.following.user.serializer";
 
 export class CommandSerializers {
     
@@ -30,8 +31,8 @@ export class CommandSerializers {
     private refuseFollowSerializer: RefuseFollowSerializer;
     @Inject
     private sharePostSerializer: SharePostSerializer;
-    /*@Inject
-    private stopFollowingUserSerializer: StopFollowingUserSerializer;*/
+    @Inject
+    private stopFollowingUserSerializer: StopFollowingUserSerializer;
 
     public constructor(){
         this.initMapper();
@@ -46,7 +47,7 @@ export class CommandSerializers {
         this.processors.set("ReactPost", this.reactPostSerializer);
         this.processors.set("RefuseFollow", this.refuseFollowSerializer);
         this.processors.set("SharePost", this.sharePostSerializer);
-        //this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
+        this.processors.set("StopFollowingUser", this.stopFollowingUserSerializer);
     }
     
     public get(commandName: String): ICommandSerializer<any> {

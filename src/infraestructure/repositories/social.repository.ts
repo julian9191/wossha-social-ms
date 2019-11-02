@@ -163,8 +163,7 @@ export class SocialRepository implements IRepository<FollowUser> {
     }
     
     public async stopFollowingUser(username: string, followingUserName: string) {
-        //this.socialDao = this.dbi.onDemand(SocialDao.class);
-        //this.socialDao.removeFollowingUser(username, followingUserName);
+        return await this.socialDao.removeFollowingUser(username, followingUserName);
     }
     
     public async saveChatMessage(message/*: ChatMessage*/) {
